@@ -1,81 +1,37 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-Parser');
-var mongoose = require('mongoose');
-
-Genre = require('./models/genre');
-Book = require('./models/book');
 
 
-// Connect to Mongooose
+app.use(bodyParser.json());
 
-mongoose.connect('mongodb://localhost/bookstore',{ useMongoClient: true });
- var db =  mongoose.connection;
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 
-// app.get('/', function( req ,res){
+app.use(express.static('public'));
 
-//   res.sendFile(path.join(__dirname+'/views/index.html'));
-// });
+app.set('views', './views');
+app.set('view engine', 'jade');
 
-app.get('/', function( req ,res){
+app.get("/", function (req, res) {
+    res.render('index');
+})
 
-request.get('http://some.server.com/', {
-  'auth': {
-    'user': 'username',
-    'pass': 'password',
-    'sendImmediately': false
-  }
+app.get("/product", function (req, res, next) {
+    res.render('product',{});
 });
 
-});
+const port = 3001;
+const host = 'localhost';
+const expressConfig = {host: host, port: port};
 
-app.get('/product', function( req ,res){
-  res.sendFile(__dirname + '/views/product.html');
-});
-
-app.get('/api/genres', function(req, res){
-	Genre.getGenres(function(err, genres){
-
-		if (err){
-
-			throw err;
-		}
-
-		res.json(genres);	
-
-	});
-});
-
-
-app.get('/api/books', function(req, res){
-	Book.getBooks(function(err, books){
-
-		if (err){
-
-			throw err;
-		}
-
-		res.json(books);	
-
-	});
+app.listen(expressConfig, function () {
+    console.log(
+        'Node server listening on %s:%d within %s environment',
+        host, port, app.set('env')
+    );
 });
 
 
 
-app.get('/api/books/:_id', function(req, res){
-	Book.getBookById(req.params._id , function(err, book){
-
-		if (err){
-
-			throw err;
-		}
-
-		res.json(book);	
-
-	});
-});
-
-
-
-app.listen(3001);
-console.log('start');
