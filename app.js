@@ -18,6 +18,10 @@ app.get("/", function (req, res) {
     res.render('index');
 })
 
+app.get("/login",function(req,res){
+    res.render('profile')
+})
+
 app.get("/product", function (req, res, next) {
     res.render('product',{});
 });
